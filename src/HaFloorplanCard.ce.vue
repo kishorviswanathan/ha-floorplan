@@ -181,6 +181,7 @@ ha-card {
   display: block;
   width: 100%;
   line-height: 0;
+  container-type: inline-size;
 }
 
 .image-wrapper img {
@@ -196,7 +197,8 @@ ha-card {
     background: rgba(0,0,0,0.7);
     color: white;
     padding: 2px 4px;
-    font-size: 1.5vw;
+    font-size: 14px; /* Fallback */
+    font-size: 1.5cqw;
     border-radius: 4px;
     white-space: nowrap;
     pointer-events: none;
