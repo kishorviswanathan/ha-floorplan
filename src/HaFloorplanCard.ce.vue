@@ -196,7 +196,7 @@ ha-card {
     background: rgba(0,0,0,0.7);
     color: white;
     padding: 2px 4px;
-    font-size: 0.75rem;
+    font-size: 1.5vw;
     border-radius: 4px;
     white-space: nowrap;
     pointer-events: none;
