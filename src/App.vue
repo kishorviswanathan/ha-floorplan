@@ -30,7 +30,7 @@ import { RouterView, RouterLink } from 'vue-router';
 .logo {
   font-weight: 700;
   font-size: 1.25rem;
-  background: linear-gradient(to right, var(--color-primary), var(--color-text-accent));
+  background: linear-gradient(to right, #ffffff, var(--color-text-accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
