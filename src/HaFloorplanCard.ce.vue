@@ -93,7 +93,7 @@ function handleEntityClick(entityId: string, type: string) {
 
 
 
-console.info(`%c HA Floorplan Card %c v${__APP_VERSION__} `, 'background: #333; color: #fff', 'background: #0ea5e9; color: #fff');
+console.info(`%c HA Floorplan Card %c ${__APP_VERSION__} `, 'background: #333; color: #fff', 'background: #0ea5e9; color: #fff');
 </script>
 
 <template>

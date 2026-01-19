@@ -5302,7 +5302,7 @@ const pf = { class: "viewer-area" }, hf = {
         entity_id: s
       }));
     }
-    return console.info("%c HA Floorplan Card %c vv1.0-6-gec8db2e ", "background: #333; color: #fff", "background: #0ea5e9; color: #fff"), (s, r) => n.value ? (de(), be("ha-card", Vf, [
+    return console.info("%c HA Floorplan Card %c v1.1.0 ", "background: #333; color: #fff", "background: #0ea5e9; color: #fff"), (s, r) => n.value ? (de(), be("ha-card", Vf, [
       Te(Df, {
         config: n.value,
         "entity-states": o.value,

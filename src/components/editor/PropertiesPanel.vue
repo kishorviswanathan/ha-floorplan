@@ -320,7 +320,7 @@ const version = __APP_VERSION__;
     </div>
     
     <div class="panel-footer">
-        v{{ version }}
+        {{ version }}
     </div>
   </div>
 </template>
