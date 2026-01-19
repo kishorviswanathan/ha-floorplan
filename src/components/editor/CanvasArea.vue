@@ -15,11 +15,11 @@ defineExpose({
 });
 
 function zoomIn() {
-    zoomScale.value = Math.min(zoomScale.value + 0.5, 5);
+    zoomScale.value = Math.min(zoomScale.value + 0.2, 2);
 }
 
 function zoomOut() {
-    zoomScale.value = Math.max(zoomScale.value - 0.5, 1);
+    zoomScale.value = Math.max(zoomScale.value - 0.2, 0.6);
 }
 
 function onCanvasClick(event: MouseEvent) {
