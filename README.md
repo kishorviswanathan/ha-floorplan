@@ -30,7 +30,7 @@ Use the online editor to:
 You can directly link to the JS file from the master branch using JSDelivr:
 
 1. Go to **Settings** > **Dashboards** > **Three dots** > **Resources**.
-2. **Add Resource**: (replace <version> with the version you want to use)
+2. **Add Resource**: (replace `<version>` with the version you want to use)
    - URL: `https://cdn.jsdelivr.net/gh/kishorviswanathan/ha-floorplan@v<version>/release/ha-floorplan-card.js`
    - Type: `JavaScript Module`
 3. Click **Create**.
