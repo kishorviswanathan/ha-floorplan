@@ -116,7 +116,7 @@ input:focus {
 .viewer-area {
   flex: 1;
   background-color: var(--color-bg-secondary);
-  display: flex;
+  display: block;
   overflow: auto;
   /* Enable scrolling */
   position: relative;
