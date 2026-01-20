@@ -48,7 +48,7 @@ function getEntityPositionStyle(entity: any) {
         height: `${style.height}%`,
         transform: `translate(-50%, -50%) rotate(${style.rotation}deg)`,
         position: 'absolute' as const,
-        zIndex: 10
+        zIndex: 1
     };
 }
 
