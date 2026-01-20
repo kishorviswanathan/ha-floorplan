@@ -278,7 +278,7 @@ const version = __APP_VERSION__;
                     </div>
                 </div>
 
-                 <div class="section-title">Colors</div>
+                 <div class="section-title">Default Colors</div>
                  <div class="input-group">
                     <label>On Color</label>
                     <div class="color-picker-row">
@@ -304,15 +304,15 @@ const version = __APP_VERSION__;
                 </div>
 
                 <div class="section-title">Light Zone</div>
-                <div class="input-group">
+                <p class="hint small">
+                    {{ isDrawing ? 'Click on canvas to add points.' : 'Define a custom shape for light spread.' }}
+                </p>
+                <div class="input-group inline">
                     <button @click="$emit('toggle-draw-mode')" :class="{ active: isDrawing }">
-                        {{ isDrawing ? 'Finish Drawing' : 'Draw Light Zone' }}
+                        {{ isDrawing ? 'Finish' : 'Draw' }}
                     </button>
-                    <p class="hint small">
-                        {{ isDrawing ? 'Click on canvas to add points.' : 'Define a custom shape for light spread.' }}
-                    </p>
                     <button v-if="selectedEntity.points && selectedEntity.points.length > 0" @click="clearPoints" class="secondary">
-                        Clear Zone
+                        Clear
                     </button>
                 </div>
 
@@ -380,6 +380,11 @@ const version = __APP_VERSION__;
 
 .input-group {
     margin-bottom: 1rem;
+}
+
+.input-group.inline {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .input-group label {
