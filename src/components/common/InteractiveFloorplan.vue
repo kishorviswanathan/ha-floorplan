@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FloorplanConfig, EntityState } from '../../types/floorplan';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps<{
     config: FloorplanConfig,
@@ -9,12 +9,49 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'entity-click', entityId: string, type: string): void
+  (e: 'entity-long-press', entityId: string): void
 }>();
 
 const hasImage = computed(() => !!props.config.imageBase64);
 
-function onEntityClick(entity: any) {
-  emit('entity-click', entity.entityId, entity.type);
+// Long Press Logic
+const longPressTimer = ref<number | null>(null);
+const isLongPress = ref(false);
+const pointerStart = ref({ x: 0, y: 0 });
+
+function handlePointerDown(event: PointerEvent, entity: any) {
+    if (event.button !== 0) return; // Only left click
+    isLongPress.value = false;
+    pointerStart.value = { x: event.clientX, y: event.clientY };
+    
+    longPressTimer.value = window.setTimeout(() => {
+        isLongPress.value = true;
+        emit('entity-long-press', entity.entityId);
+    }, 500); // 500ms threshold
+}
+
+function handlePointerUp(event: PointerEvent, entity: any) {
+    if (longPressTimer.value) {
+        clearTimeout(longPressTimer.value);
+        longPressTimer.value = null;
+    }
+
+    if (!isLongPress.value) {
+        // Check if moved significantly (drag check)
+        const dx = Math.abs(event.clientX - pointerStart.value.x);
+        const dy = Math.abs(event.clientY - pointerStart.value.y);
+        if (dx < 10 && dy < 10) {
+            emit('entity-click', entity.entityId, entity.type);
+        }
+    }
+    isLongPress.value = false;
+}
+
+function handlePointerLeave() {
+     if (longPressTimer.value) {
+        clearTimeout(longPressTimer.value);
+        longPressTimer.value = null;
+    }
 }
 
 function getEntityValues(entity: any) {
@@ -136,7 +173,9 @@ function getPointsString(points?: {x: number, y: number}[]) {
             :key="entity.id"
             class="interactive-entity"
             :style="getEntityPositionStyle(entity)"
-            @click="onEntityClick(entity)"
+            @pointerdown="handlePointerDown($event, entity)"
+            @pointerup="handlePointerUp($event, entity)"
+            @pointerleave="handlePointerLeave()"
             :title="entity.label"
           >
              <div class="entity-shape" :style="getEntityVisualStyle(entity)"></div>
@@ -144,7 +183,9 @@ function getPointsString(points?: {x: number, y: number}[]) {
                 v-if="entity.labelConfig.show" 
                 class="entity-label" 
                 :style="getLabelStyle(entity)"
-                @click.stop="onEntityClick(entity)"
+                @pointerdown.stop="handlePointerDown($event, entity)"
+                @pointerup.stop="handlePointerUp($event, entity)"
+                @pointerleave.stop="handlePointerLeave()"
              >
                 {{ entity.label }}
              </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import InteractiveFloorplan from './components/common/InteractiveFloorplan.vue';
 import type { FloorplanConfig, EntityState } from './types/floorplan';
 
@@ -7,6 +7,8 @@ const props = defineProps<{
     config?: FloorplanConfig | string,
     hass?: any
 }>();
+
+const cardRef = ref<HTMLElement | null>(null);
 
 const parsedConfig = computed((): FloorplanConfig | null => {
     if (!props.config) return null;
@@ -99,17 +101,29 @@ function handleEntityClick(entityId: string, type: string) {
     }
 }
 
+function handleEntityLongPress(entityId: string) {
+    const event = new CustomEvent('hass-more-info', {
+        detail: { entityId },
+        bubbles: true,
+        composed: true,
+    });
+    if (cardRef.value) {
+        cardRef.value.dispatchEvent(event);
+    }
+}
+
 
 
 console.info(`%c HA Floorplan Card %c ${__APP_VERSION__} `, 'background: #333; color: #fff', 'background: #0ea5e9; color: #fff');
 </script>
 
 <template>
-  <ha-card class="ha-card-wrapper" v-if="parsedConfig">
+  <ha-card ref="cardRef" class="ha-card-wrapper" v-if="parsedConfig">
     <InteractiveFloorplan 
         :config="parsedConfig" 
         :entity-states="entityStates"
         @entity-click="handleEntityClick"
+        @entity-long-press="handleEntityLongPress"
     />
   </ha-card>
   <div v-else class="error">
