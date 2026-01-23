@@ -59,12 +59,7 @@ export const useFloorplanStore = defineStore('floorplan', () => {
         };
         config.value.entities.push(newEntity);
         selectedEntityId.value = id;
-        // Init state
-        let initialState = 'off'
-        if (newEntity.type === 'camera') {
-            initialState = 'idle'
-        }
-        entityStates.value[newEntity.entityId] = { state: initialState, brightness: 255 };
+        entityStates.value[newEntity.entityId] = { state: 'off', brightness: 255 };
     }
 
     function removeEntity(id: string) {
@@ -97,7 +92,8 @@ export const useFloorplanStore = defineStore('floorplan', () => {
             }
             newState.shouldLightUp = ['streaming', 'recording'].includes(newState.state);
         } else {
-            newState = { ...current, state: current.state === 'off' ? 'on' : 'off', shouldLightUp: current.state == 'on' };
+            newState = { ...current, state: current.state === 'off' ? 'on' : 'off' };
+            newState.shouldLightUp = newState.state === 'on';
         }
         entityStates.value[entityId] = newState;
     }
