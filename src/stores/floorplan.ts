@@ -95,10 +95,10 @@ export const useFloorplanStore = defineStore('floorplan', () => {
             } else {
                 newState = { ...current, state: 'idle' };
             }
+            newState.shouldLightUp = ['streaming', 'recording'].includes(newState.state);
         } else {
-            newState = { ...current, state: current.state === 'off' ? 'on' : 'off' };
+            newState = { ...current, state: current.state === 'off' ? 'on' : 'off', shouldLightUp: current.state == 'on' };
         }
-        newState.shouldLightUp = ['on', 'recording', 'streaming'].includes(newState.state);
         entityStates.value[entityId] = newState;
     }
 

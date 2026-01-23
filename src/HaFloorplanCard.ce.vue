@@ -57,9 +57,17 @@ const entityStates = computed(() => {
                         brightness = haState.attributes.brightness;
                     }
                 }
-                states[entity.entityId] = { state, color, brightness };
+                const shouldLightUp = state === 'on';
+                states[entity.entityId] = { state, color, brightness, shouldLightUp };
+            } else if (entity.type === 'media_player') {
+                const shouldLightUp = ['on', 'playing'].includes(state);
+                states[entity.entityId] = { state, shouldLightUp };
+            } else if (entity.type === 'camera') {
+                const shouldLightUp = ['on', 'recording', 'streaming'].includes(state);
+                states[entity.entityId] = { state, shouldLightUp };
+            } else {
+                states[entity.entityId] = { state };
             }
-            states[entity.entityId] = { state, shouldLightUp: ['on', 'recording', 'streaming'].includes(state) };
         } else {
             states[entity.entityId] = { state: 'off' };
         }
@@ -80,7 +88,7 @@ function handleEntityClick(entityId: string, type: string) {
         });
     } else if (type === 'camera') {
         // Not all cameras support turn_on/turn_off
-        const service = entityStates.value[entityId]?.state == 'on' ? 'turn_off' : 'turn_on';
+        const service = entityStates.value[entityId]?.state == 'idle' ? 'turn_on' : 'turn_off';
         props.hass.callService('homeassistant', service, {
             entity_id: entityId
         });
