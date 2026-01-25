@@ -220,12 +220,19 @@ function onLabelTouchEnd() {
 const styleObject = computed(() => {
   const { shape, style, x, y } = props.entity;
 
+  // Safely access offColor from union type
+  let backgroundColor = '#94a3b8'; // default
+  const colors = style.colors;
+  if (colors && 'offColor' in colors) {
+    backgroundColor = colors.offColor;
+  }
+
   const baseStyle: Record<string, any> = {
     left: `${x}%`,
     top: `${y}%`,
     width: `${style.width}%`,
     height: `${style.height}%`,
-    backgroundColor: style.offColor,
+    backgroundColor,
     opacity: style.offOpacity,
     transform: `translate(-50%, -50%) rotate(${style.rotation}deg)`,
     position: 'absolute' as const,

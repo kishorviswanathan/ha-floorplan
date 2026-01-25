@@ -2,6 +2,7 @@
 import { useFloorplanStore } from '../../stores/floorplan';
 import { computed, ref } from 'vue';
 import yaml from 'js-yaml';
+import { migrateConfig, needsMigration } from '../../utils/configMigration';
 
 const store = useFloorplanStore();
 
@@ -105,6 +106,12 @@ function onImportFile(event: Event) {
                     // Strip newlines/spaces from imageBase64 if imported from block style
                     if (configToLoad && configToLoad.imageBase64) {
                         configToLoad.imageBase64 = configToLoad.imageBase64.replace(/\s/g, '');
+                    }
+
+                    // Apply migration for older configurations
+                    if (needsMigration(configToLoad)) {
+                        console.log('Migrating configuration from old color format...');
+                        configToLoad = migrateConfig(configToLoad);
                     }
 
                     if (configToLoad && configToLoad.id && configToLoad.entities) {
@@ -278,16 +285,16 @@ const version = __APP_VERSION__;
                         <div class="input-group">
                             <label>On Color</label>
                             <div class="color-picker-row">
-                                <input type="color" v-model="selectedEntity.style.onColor">
-                                <input type="text" v-model="selectedEntity.style.onColor">
+                                <input type="color" v-model="(selectedEntity.style.colors as any).onColor">
+                                <input type="text" v-model="(selectedEntity.style.colors as any).onColor">
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label>Off Color</label>
                             <div class="color-picker-row">
-                                <input type="color" v-model="selectedEntity.style.offColor">
-                                <input type="text" v-model="selectedEntity.style.offColor">
+                                <input type="color" v-model="(selectedEntity.style.colors as any).offColor">
+                                <input type="text" v-model="(selectedEntity.style.colors as any).offColor">
                             </div>
                         </div>
                     </div>
@@ -298,24 +305,24 @@ const version = __APP_VERSION__;
                         <div class="input-group">
                             <label>Idle/Off Color</label>
                             <div class="color-picker-row">
-                                <input type="color" v-model="selectedEntity.style.cameraIdleColor">
-                                <input type="text" v-model="selectedEntity.style.cameraIdleColor">
+                                <input type="color" v-model="(selectedEntity.style.colors as any).idleColor">
+                                <input type="text" v-model="(selectedEntity.style.colors as any).idleColor">
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label>Recording Color (Blinks)</label>
                             <div class="color-picker-row">
-                                <input type="color" v-model="selectedEntity.style.cameraRecordingColor">
-                                <input type="text" v-model="selectedEntity.style.cameraRecordingColor">
+                                <input type="color" v-model="(selectedEntity.style.colors as any).recordingColor">
+                                <input type="text" v-model="(selectedEntity.style.colors as any).recordingColor">
                             </div>
                         </div>
 
                         <div class="input-group">
                             <label>Streaming Color</label>
                             <div class="color-picker-row">
-                                <input type="color" v-model="selectedEntity.style.cameraStreamingColor">
-                                <input type="text" v-model="selectedEntity.style.cameraStreamingColor">
+                                <input type="color" v-model="(selectedEntity.style.colors as any).streamingColor">
+                                <input type="text" v-model="(selectedEntity.style.colors as any).streamingColor">
                             </div>
                         </div>
                     </div>

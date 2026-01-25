@@ -1,18 +1,27 @@
 export type EntityType = 'light' | 'media_player' | 'camera';
 export type EntityShape = 'circle' | 'square' | 'rect' | 'custom';
 
+// Used by Light and Switch entities
+export interface BinaryColors {
+  onColor: string;
+  offColor: string;
+}
+
+// Used by Camera entities
+export interface CameraColors {
+  idleColor: string;
+  recordingColor: string;
+  streamingColor: string;
+}
+
 export interface EntityStyle {
   width: number; // css value or percentage
   height: number;
-  onColor: string;
-  offColor: string;
+  colors: BinaryColors | CameraColors;
   onOpacity: number;
   offOpacity: number;
   gradientRadius: number; // percentage
   rotation: number; // degrees
-  cameraIdleColor?: string; // Color for camera when idle/off
-  cameraRecordingColor?: string; // Color for camera when recording (will blink)
-  cameraStreamingColor?: string; // Color for camera when streaming
 }
 
 export interface LabelConfig {

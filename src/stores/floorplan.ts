@@ -40,15 +40,20 @@ export const useFloorplanStore = defineStore('floorplan', () => {
             style: {
                 width: 5, // % relative to container width
                 height: 5,
-                onColor: '#facc15', // yellow-400
-                offColor: '#94a3b8', // slate-400
+                colors: type === 'camera'
+                    ? {
+                        idleColor: '#6b7280',
+                        recordingColor: '#ef4444',
+                        streamingColor: '#3b82f6'
+                    }
+                    : {
+                        onColor: '#facc15', // yellow-400
+                        offColor: '#94a3b8', // slate-400
+                    },
                 onOpacity: 0.8,
                 offOpacity: 0.3,
                 gradientRadius: 30,
                 rotation: 0,
-                cameraIdleColor: '#6b7280',
-                cameraRecordingColor: '#ef4444',
-                cameraStreamingColor: '#3b82f6'
             },
             labelConfig: {
                 show: true,

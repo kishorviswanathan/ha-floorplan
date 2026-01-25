@@ -11,36 +11,36 @@ const zoomScale = ref(1);
 const hasImage = computed(() => !!store.config.imageBase64);
 
 defineExpose({
-    isDrawing
+  isDrawing
 });
 
 function zoomIn() {
-    zoomScale.value = Math.min(zoomScale.value + 0.25, 5);
+  zoomScale.value = Math.min(zoomScale.value + 0.25, 5);
 }
 
 function zoomOut() {
-    zoomScale.value = Math.max(zoomScale.value - 0.25, 0.5);
+  zoomScale.value = Math.max(zoomScale.value - 0.25, 0.5);
 }
 
 function onCanvasClick(event: MouseEvent) {
-    if (isDrawing.value && store.selectedEntityId) {
-        // Add point
-         const container = document.querySelector('.image-wrapper'); 
-         if (!container) return;
-         
-         const rect = container.getBoundingClientRect();
-         // Coordinates are already handled correctly by getBoundingClientRect on scaled element
-         const x = ((event.clientX - rect.left) / rect.width) * 100;
-         const y = ((event.clientY - rect.top) / rect.height) * 100;
-         
-         const entity = store.selectedEntity;
-         if (entity) {
-             const newPoints = [...(entity.points || []), { x, y }];
-             store.updateEntity(entity.id, { points: newPoints });
-         }
-    } else {
-        store.selectedEntityId = null;
+  if (isDrawing.value && store.selectedEntityId) {
+    // Add point
+    const container = document.querySelector('.image-wrapper');
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    // Coordinates are already handled correctly by getBoundingClientRect on scaled element
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+    const entity = store.selectedEntity;
+    if (entity) {
+      const newPoints = [...(entity.points || []), { x, y }];
+      store.updateEntity(entity.id, { points: newPoints });
     }
+  } else {
+    store.selectedEntityId = null;
+  }
 }
 
 function onFileChange(event: Event) {
@@ -79,74 +79,74 @@ function onDragOver(event: DragEvent) {
 
 const draggingKey = ref<number | null>(null);
 
-function getPointsString(points?: {x: number, y: number}[]) {
-    if (!points) return '';
-    return points.map(p => `${p.x} ${p.y}`).join(',');
-} 
+function getPointsString(points?: { x: number, y: number }[]) {
+  if (!points) return '';
+  return points.map(p => `${p.x} ${p.y}`).join(',');
+}
 
 function onPointMouseDown(index: number, event: MouseEvent) {
-    event.stopPropagation();
-    draggingKey.value = index;
-    window.addEventListener('mousemove', onPointMouseMove);
-    window.addEventListener('mouseup', onPointMouseUp);
+  event.stopPropagation();
+  draggingKey.value = index;
+  window.addEventListener('mousemove', onPointMouseMove);
+  window.addEventListener('mouseup', onPointMouseUp);
 }
 
 function onPointMouseMove(event: MouseEvent) {
-    if (draggingKey.value === null || !store.selectedEntity) return;
+  if (draggingKey.value === null || !store.selectedEntity) return;
 
-    const container = document.querySelector('.image-wrapper'); 
-    if (!container) return;
-    
-    const rect = container.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-    
-    // Update specific point
-    const points = [...(store.selectedEntity.points || [])];
-    if (points[draggingKey.value]) {
-        points[draggingKey.value] = { x, y };
-        store.updateEntity(store.selectedEntity.id, { points });
-    }
+  const container = document.querySelector('.image-wrapper');
+  if (!container) return;
+
+  const rect = container.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width) * 100;
+  const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+  // Update specific point
+  const points = [...(store.selectedEntity.points || [])];
+  if (points[draggingKey.value]) {
+    points[draggingKey.value] = { x, y };
+    store.updateEntity(store.selectedEntity.id, { points });
+  }
 }
 
 function onPointMouseUp() {
-    draggingKey.value = null;
-    window.removeEventListener('mousemove', onPointMouseMove);
-    window.removeEventListener('mouseup', onPointMouseUp);
+  draggingKey.value = null;
+  window.removeEventListener('mousemove', onPointMouseMove);
+  window.removeEventListener('mouseup', onPointMouseUp);
 }
 
 function onPointTouchStart(index: number, event: TouchEvent) {
-    event.stopPropagation();
-    draggingKey.value = index;
-    window.addEventListener('touchmove', onPointTouchMove, { passive: false });
-    window.addEventListener('touchend', onPointTouchEnd);
+  event.stopPropagation();
+  draggingKey.value = index;
+  window.addEventListener('touchmove', onPointTouchMove, { passive: false });
+  window.addEventListener('touchend', onPointTouchEnd);
 }
 
 function onPointTouchMove(event: TouchEvent) {
-    if (draggingKey.value === null || !store.selectedEntity) return;
-    event.preventDefault(); // Stop scrolling
+  if (draggingKey.value === null || !store.selectedEntity) return;
+  event.preventDefault(); // Stop scrolling
 
-    const container = document.querySelector('.image-wrapper'); 
-    if (!container) return;
-    
-    const touch = event.touches[0];
-    if (!touch) return;
+  const container = document.querySelector('.image-wrapper');
+  if (!container) return;
 
-    const rect = container.getBoundingClientRect();
-    const x = ((touch.clientX - rect.left) / rect.width) * 100;
-    const y = ((touch.clientY - rect.top) / rect.height) * 100;
-    
-    const points = [...(store.selectedEntity.points || [])];
-    if (points[draggingKey.value]) {
-        points[draggingKey.value] = { x, y };
-        store.updateEntity(store.selectedEntity.id, { points });
-    }
+  const touch = event.touches[0];
+  if (!touch) return;
+
+  const rect = container.getBoundingClientRect();
+  const x = ((touch.clientX - rect.left) / rect.width) * 100;
+  const y = ((touch.clientY - rect.top) / rect.height) * 100;
+
+  const points = [...(store.selectedEntity.points || [])];
+  if (points[draggingKey.value]) {
+    points[draggingKey.value] = { x, y };
+    store.updateEntity(store.selectedEntity.id, { points });
+  }
 }
 
 function onPointTouchEnd() {
-    draggingKey.value = null;
-    window.removeEventListener('touchmove', onPointTouchMove);
-    window.removeEventListener('touchend', onPointTouchEnd);
+  draggingKey.value = null;
+  window.removeEventListener('touchmove', onPointTouchMove);
+  window.removeEventListener('touchend', onPointTouchEnd);
 }
 </script>
 
@@ -154,95 +154,57 @@ function onPointTouchEnd() {
   <div class="canvas-area" @click.self="onCanvasClick" @drop.prevent="onDrop" @dragover.prevent="onDragOver">
     <!-- Empty State / Uploader -->
 
-    <div 
-        v-if="!hasImage" 
-        class="upload-zone"
-        @drop="onDrop"
-        @dragover="onDragOver"
-        @click="triggerUpload"
-    >
+    <div v-if="!hasImage" class="upload-zone" @drop="onDrop" @dragover="onDragOver" @click="triggerUpload">
       <div class="upload-content">
         <div class="icon">🖼️</div>
         <h3>Upload Floorplan</h3>
         <p>Drag & drop an image here, or click to select</p>
       </div>
-      <input 
-        ref="fileInput"
-        type="file" 
-        accept="image/*" 
-        class="hidden-input"
-        @change="onFileChange"
-      >
+      <input ref="fileInput" type="file" accept="image/*" class="hidden-input" @change="onFileChange">
     </div>
 
     <!-- Canvas -->
     <div v-else class="canvas-container">
-       
-       <div class="zoom-controls">
-           <button class="zoom-btn" @click="zoomOut">-</button>
-           <span class="zoom-level">{{ Math.round(zoomScale * 100) }}%</span>
-           <button class="zoom-btn" @click="zoomIn">+</button>
-       </div>
 
-       <div class="scroll-frame">
-           <div class="image-wrapper" 
-                @click="onCanvasClick"
-                :style="{ transform: `scale(${zoomScale})`, transformOrigin: 'top left' }"
-           >
-              <img :src="store.config.imageBase64" alt="Floorplan Base" draggable="false" />
-              
-              <svg class="overlay-layer" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <defs>
-                  <radialGradient 
-                    v-for="entity in store.entities"
-                    :key="'grad-' + entity.id"
-                    :id="'grad-editor-' + entity.id"
-                    gradientUnits="userSpaceOnUse"
-                    :cx="entity.x"
-                    :cy="entity.y"
-                    :r="entity.style.gradientRadius"
-                  >
-                    <stop offset="0%" :stop-color="entity.style.onColor" :stop-opacity="entity.style.onOpacity" />
-                    <stop offset="100%" :stop-color="entity.style.onColor" stop-opacity="0" />
-                  </radialGradient>
-                </defs>
-                <polygon 
-                    v-for="entity in store.entities"
-                    :key="'poly-' + entity.id"
-                    :points="getPointsString(entity.points)"
-                    :fill="`url(#grad-editor-${entity.id})`"
-                    :stroke="store.selectedEntityId === entity.id ? 'var(--color-primary)' : 'none'"
-                    stroke-width="0.5"
-                    style="pointer-events: none;"
-                />
-                 <!-- Vertex Handles -->
-                <template v-for="entity in store.entities">
-                    <circle
-                        v-if="store.selectedEntityId === entity.id"
-                        v-for="(point, index) in entity.points"
-                        :key="'point-'+entity.id+'-'+index"
-                        :cx="point.x"
-                        :cy="point.y"
-                        r="0.4"
-                        fill="var(--color-primary)"
-                        stroke="white"
-                        stroke-width="0.1"
-                        style="cursor: grab; pointer-events: auto;"
-                        @mousedown="onPointMouseDown(index, $event)"
-                        @touchstart="onPointTouchStart(index, $event)"
-                        @click.stop
-                    />
-                </template>
-              </svg>
+      <div class="zoom-controls">
+        <button class="zoom-btn" @click="zoomOut">-</button>
+        <span class="zoom-level">{{ Math.round(zoomScale * 100) }}%</span>
+        <button class="zoom-btn" @click="zoomIn">+</button>
+      </div>
 
-              <!-- Entity Overlays -->
-              <EntityOverlay 
-                v-for="entity in store.entities" 
-                :key="entity.id" 
-                :entity="entity" 
-              />
-           </div>
-       </div>
+      <div class="scroll-frame">
+        <div class="image-wrapper" @click="onCanvasClick"
+          :style="{ transform: `scale(${zoomScale})`, transformOrigin: 'top left' }">
+          <img :src="store.config.imageBase64" alt="Floorplan Base" draggable="false" />
+
+          <svg class="overlay-layer" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <defs>
+              <radialGradient v-for="entity in store.entities" :key="'grad-' + entity.id"
+                :id="'grad-editor-' + entity.id" gradientUnits="userSpaceOnUse" :cx="entity.x" :cy="entity.y"
+                :r="entity.style.gradientRadius">
+                <stop offset="0%" :stop-color="(entity.style.colors as any).onColor || '#facc15'"
+                  :stop-opacity="entity.style.onOpacity" />
+                <stop offset="100%" :stop-color="(entity.style.colors as any).onColor || '#facc15'" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <polygon v-for="entity in store.entities" :key="'poly-' + entity.id"
+              :points="getPointsString(entity.points)" :fill="`url(#grad-editor-${entity.id})`"
+              :stroke="store.selectedEntityId === entity.id ? 'var(--color-primary)' : 'none'" stroke-width="0.5"
+              style="pointer-events: none;" />
+            <!-- Vertex Handles -->
+            <template v-for="entity in store.entities">
+              <circle v-if="store.selectedEntityId === entity.id" v-for="(point, index) in entity.points"
+                :key="'point-' + entity.id + '-' + index" :cx="point.x" :cy="point.y" r="0.4" fill="var(--color-primary)"
+                stroke="white" stroke-width="0.1" style="cursor: grab; pointer-events: auto;"
+                @mousedown="onPointMouseDown(index, $event)" @touchstart="onPointTouchStart(index, $event)"
+                @click.stop />
+            </template>
+          </svg>
+
+          <!-- Entity Overlays -->
+          <EntityOverlay v-for="entity in store.entities" :key="entity.id" :entity="entity" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -254,7 +216,8 @@ function onPointTouchEnd() {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Main area doesn't scroll, the container handles it */
+  overflow: hidden;
+  /* Main area doesn't scroll, the container handles it */
   position: relative;
   padding: 2rem;
 }
@@ -275,7 +238,8 @@ function onPointTouchEnd() {
 
 .upload-zone:hover {
   border-color: var(--color-primary);
-  background: rgba(14, 165, 233, 0.05); /* primary with low opacity */
+  background: rgba(14, 165, 233, 0.05);
+  /* primary with low opacity */
 }
 
 .upload-content {
@@ -294,7 +258,7 @@ function onPointTouchEnd() {
 .canvas-container {
   box-shadow: var(--shadow-xl);
   border-radius: var(--radius-sm);
-  overflow: hidden; 
+  overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -303,67 +267,71 @@ function onPointTouchEnd() {
 }
 
 .zoom-controls {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 100;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    padding: 4px;
-    border-radius: 4px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    color: white;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: white;
 }
 
 .zoom-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: 4px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 .zoom-btn:hover {
-    background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .scroll-frame {
-    flex: 1;
-    overflow: auto;
-    position: relative;
-    padding: 20px; /* space for scrolling */
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  padding: 20px;
+  /* space for scrolling */
 }
 
 .image-wrapper {
   position: relative;
-  display: inline-block; /* shrink to image size */
-  line-height: 0; /* remove gap */
+  display: inline-block;
+  /* shrink to image size */
+  line-height: 0;
+  /* remove gap */
   cursor: crosshair;
   transition: transform 0.2s ease;
 }
 
 .overlay-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .overlay-layer polygon {
-    vector-effect: non-scaling-stroke;
+  vector-effect: non-scaling-stroke;
 }
 
 .image-wrapper img {
-  max-width: none; /* remove constraint so it can zoom */
+  max-width: none;
+  /* remove constraint so it can zoom */
   /* Remove max-height constraint to allow full zoom */
   display: block;
   user-select: none;

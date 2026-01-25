@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FloorplanConfig, EntityState } from '../../types/floorplan';
+import type { FloorplanConfig, EntityState, CameraColors, BinaryColors } from '../../types/floorplan';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
@@ -61,16 +61,17 @@ function getEntityValues(entity: any) {
     // Handle camera entities with state-specific colors
     if (entity.type === 'camera') {
         let color: string;
+        const colors = style.colors as CameraColors;
         const defaultIdleColor = '#6b7280'; // Gray
         const defaultRecordingColor = '#ef4444'; // Red
         const defaultStreamingColor = '#3b82f6'; // Blue
 
         if (state.state === 'recording') {
-            color = style.cameraRecordingColor || defaultRecordingColor;
+            color = colors.recordingColor || defaultRecordingColor;
         } else if (state.state === 'streaming') {
-            color = style.cameraStreamingColor || defaultStreamingColor;
+            color = colors.streamingColor || defaultStreamingColor;
         } else {
-            color = style.cameraIdleColor || defaultIdleColor;
+            color = colors.idleColor || defaultIdleColor;
         }
 
         return {
@@ -80,14 +81,15 @@ function getEntityValues(entity: any) {
     }
 
     // Handle other entity types
+    const colors = style.colors as BinaryColors;
     if (state.state == 'off') {
         return {
-            color: style.offColor,
+            color: colors.offColor,
             opacity: style.offOpacity
         };
     }
 
-    let color = state.color || style.onColor;
+    let color = state.color || colors.onColor;
     let opacity = style.onOpacity;
 
     if (state.brightness !== undefined) {

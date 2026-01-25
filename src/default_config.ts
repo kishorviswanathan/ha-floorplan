@@ -88,8 +88,10 @@ export default {
             "style": {
                 "width": 2,
                 "height": 2,
-                "onColor": "#acb7c8",
-                "offColor": "#94a3b8",
+                "colors": {
+                    "onColor": "#acb7c8",
+                    "offColor": "#94a3b8"
+                },
                 "onOpacity": 0.8,
                 "offOpacity": 0.3,
                 "rotation": 0,
@@ -137,8 +139,10 @@ export default {
             "style": {
                 "width": 0,
                 "height": 0,
-                "onColor": "#13b6fb",
-                "offColor": "#94a3b8",
+                "colors": {
+                    "onColor": "#13b6fb",
+                    "offColor": "#94a3b8"
+                },
                 "onOpacity": 0.8,
                 "offOpacity": 0.3,
                 "rotation": 0,
@@ -258,8 +262,10 @@ export default {
             "style": {
                 "width": 2,
                 "height": 2,
-                "onColor": "#acb7c8",
-                "offColor": "#94a3b8",
+                "colors": {
+                    "onColor": "#acb7c8",
+                    "offColor": "#94a3b8"
+                },
                 "onOpacity": 0.8,
                 "offOpacity": 0.3,
                 "gradientRadius": 30,
@@ -331,8 +337,10 @@ export default {
             "style": {
                 "width": 2,
                 "height": 2,
-                "onColor": "#f4f2be",
-                "offColor": "#94a3b8",
+                "colors": {
+                    "onColor": "#f4f2be",
+                    "offColor": "#94a3b8"
+                },
                 "onOpacity": 0.8,
                 "offOpacity": 0.3,
                 "gradientRadius": 30,
@@ -408,8 +416,10 @@ export default {
             "style": {
                 "width": 2,
                 "height": 2,
-                "onColor": "#e6e4db",
-                "offColor": "#94a3b8",
+                "colors": {
+                    "onColor": "#e6e4db",
+                    "offColor": "#94a3b8"
+                },
                 "onOpacity": 0.8,
                 "offOpacity": 0.3,
                 "gradientRadius": 25,
@@ -501,8 +511,10 @@ export default {
             "style": {
                 "width": 2,
                 "height": 2,
-                "onColor": "#e6e4db",
-                "offColor": "#94a3b8",
+                "colors": {
+                    "onColor": "#e6e4db",
+                    "offColor": "#94a3b8"
+                },
                 "onOpacity": 0.8,
                 "offOpacity": 0.3,
                 "gradientRadius": 25,
@@ -590,8 +602,10 @@ export default {
             "style": {
                 "width": 2,
                 "height": 2,
-                "onColor": "#b2962a",
-                "offColor": "#94a3b8",
+                "colors": {
+                    "onColor": "#b2962a",
+                    "offColor": "#94a3b8"
+                },
                 "onOpacity": 0.8,
                 "offOpacity": 0.3,
                 "gradientRadius": 30,
